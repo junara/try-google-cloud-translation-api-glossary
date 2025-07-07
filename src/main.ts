@@ -8,22 +8,22 @@ import { CustomError } from './types/index.js';
 
 async function main() {
   try {
-    // Parse command line arguments
+    // コマンドライン引数を解析
     const args = parseArguments();
 
-    // Validate arguments
+    // 引数を検証
     await validateArguments(args);
 
-    // Initialize Translation API client
+    // Translation APIクライアントを初期化
     const client = await initializeTranslationClient(args.account, args.project);
 
-    // Load glossary from CSV
+    // CSVから用語集を読み込み
     const glossaryData = await loadGlossaryFromCSV(args.glossary);
 
-    // Create or update glossary in Google Cloud
+    // Google Cloudで用語集を作成または更新
     const glossaryId = await createOrUpdateGlossary(client, glossaryData, args.project);
 
-    // Perform translation
+    // 翻訳を実行
     await translateText(args.input, args.output, {
       client,
       from: args.from,
@@ -32,12 +32,12 @@ async function main() {
       projectId: args.project,
     });
 
-    // Success - exit silently
+    // 成功 - 静かに終了
     process.exit(0);
   } catch (error) {
     handleError(error as CustomError, 'translation process');
   }
 }
 
-// Run main function
+// メイン関数を実行
 main();

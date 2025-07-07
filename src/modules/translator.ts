@@ -14,7 +14,7 @@ export async function initializeTranslationClient(
   projectId: string
 ): Promise<TranslationServiceClient> {
   try {
-    // Set the environment variable for authentication
+    // 認証用の環境変数を設定
     process.env.GOOGLE_APPLICATION_CREDENTIALS = serviceAccountPath;
 
     const client = new TranslationServiceClient({
@@ -22,7 +22,7 @@ export async function initializeTranslationClient(
       keyFilename: serviceAccountPath,
     });
 
-    // Test the client connection
+    // クライアント接続をテスト
     console.log('Testing Translation API connection...');
     const parent = `projects/${projectId}/locations/us-central1`;
     await client.getSupportedLanguages({ parent });
@@ -62,10 +62,10 @@ export async function translateWithGlossary(
     const [response] = await client.translateText(request);
 
     if (response.glossaryTranslations && response.glossaryTranslations.length > 0) {
-      // Use glossary translation if available
+      // 利用可能な場合は用語集翻訳を使用
       return response.glossaryTranslations[0].translatedText || '';
     } else if (response.translations && response.translations.length > 0) {
-      // Fall back to regular translation
+      // 通常の翻訳にフォールバック
       return response.translations[0].translatedText || '';
     } else {
       throw new Error('No translation returned from API');
@@ -85,14 +85,14 @@ export async function translateText(
   translationOptions: TranslationOptions
 ): Promise<void> {
   try {
-    // Read input file
+    // 入力ファイルを読み込み
     const inputText = await readTextFile(inputPath);
 
-    // Translate the text
+    // テキストを翻訳
     const { client, ...options } = translationOptions;
     const translatedText = await translateWithGlossary(client, inputText, options);
 
-    // Write output file
+    // 出力ファイルに書き込み
     await writeTextFile(outputPath, translatedText);
   } catch (error) {
     const err = error as CustomError;
