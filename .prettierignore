@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+
+# Terraform
+terraform/
+*.tfstate
+*.tfstate.*
+
+# Demo outputs
+demo/*.txt
+!demo/ja.txt
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Git
+.git/
